@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Converter - Transform Your Files Instantly</title>
+    <meta name="description" content="Convert your files between different formats instantly with our beautiful, easy-to-use file converter. Support for images, documents, audio, and video files.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-gradient"></div>
+    <div class="bg-blur-orb orb-1"></div>
+    <div class="bg-blur-orb orb-2"></div>
+    <div class="bg-blur-orb orb-3"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="32" height="32" rx="8" fill="url(#logo-gradient)"/>
+                    <path d="M14 16L20 22L26 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20 22V10" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M12 28H28" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#667EEA"/>
+                            <stop offset="1" stop-color="#764BA2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="logo-text">FileFlow</span>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-view="converter">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 4V16M10 16L6 12M10 16L14 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Convert
+                </button>
+                <button class="nav-btn" data-view="history">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M10 6V10L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    History
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Converter View -->
+            <div class="view active" id="converter-view">
+                <div class="hero">
+                    <h1 class="hero-title">Transform Your Files</h1>
+                    <p class="hero-subtitle">Convert between formats instantly with our powerful file converter</p>
+                </div>
+
+                <!-- Upload Area -->
+                <div class="upload-card glass-card" id="upload-area">
+                    <div class="upload-content">
+                        <div class="upload-icon-wrapper">
+                            <svg class="upload-icon" viewBox="0 0 64 64" fill="none">
+                                <circle cx="32" cy="32" r="30" stroke="url(#upload-gradient)" stroke-width="2" stroke-dasharray="4 4"/>
+                                <path d="M32 20V44M32 20L24 28M32 20L40 28" stroke="url(#upload-gradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                <defs>
+                                    <linearGradient id="upload-gradient" x1="0" y1="0" x2="64" y2="64">
+                                        <stop stop-color="#667EEA"/>
+                                        <stop offset="1" stop-color="#764BA2"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h3 class="upload-title">Drop your file here</h3>
+                        <p class="upload-subtitle">or click to browse</p>
+                        <div class="supported-formats">
+                            <span class="format-badge">Images</span>
+                            <span class="format-badge">Documents</span>
+                            <span class="format-badge">Audio</span>
+                            <span class="format-badge">Video</span>
+                        </div>
+                    </div>
+                    <input type="file" id="file-input" hidden>
+                </div>
+
+                <!-- File Preview & Conversion -->
+                <div class="conversion-panel glass-card" id="conversion-panel" style="display: none;">
+                    <div class="file-preview">
+                        <div class="file-icon" id="file-icon">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <path d="M28 4H12C10.9 4 10 4.9 10 6V42C10 43.1 10.9 44 12 44H36C37.1 44 38 43.1 38 42V16L28 4Z" fill="url(#file-gradient)"/>
+                                <path d="M28 4V16H38" fill="#667EEA" fill-opacity="0.3"/>
+                                <defs>
+                                    <linearGradient id="file-gradient" x1="10" y1="4" x2="38" y2="44">
+                                        <stop stop-color="#667EEA"/>
+                                        <stop offset="1" stop-color="#764BA2"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="file-info">
+                            <h4 class="file-name" id="file-name">Document.pdf</h4>
+                            <p class="file-size" id="file-size">2.4 MB</p>
+                        </div>
+                        <button class="remove-btn" id="remove-file">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="conversion-arrow">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="rgba(102, 126, 234, 0.1)"/>
+                            <path d="M12 20H28M28 20L22 14M28 20L22 26" stroke="#667EEA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+
+                    <div class="format-selector">
+                        <label class="selector-label">Convert to:</label>
+                        <div class="format-grid" id="format-grid">
+                            <!-- Formats will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <button class="convert-btn" id="convert-btn">
+                        <span class="btn-text">Convert File</span>
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10H16M16 10L12 6M16 10L12 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-container" id="progress-container" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p class="progress-text" id="progress-text">Converting... 0%</p>
+                    </div>
+
+                    <!-- Download Section -->
+                    <div class="download-section" id="download-section" style="display: none;">
+                        <div class="success-icon">
+                            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                                <circle cx="30" cy="30" r="28" fill="rgba(16, 185, 129, 0.1)" stroke="#10B981" stroke-width="2"/>
+                                <path d="M18 30L26 38L42 22" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="success-title">Conversion Complete!</h3>
+                        <button class="download-btn" id="download-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 4V14M10 14L6 10M10 14L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 16H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Download File
+                        </button>
+                        <button class="new-conversion-btn" id="new-conversion-btn">Convert Another File</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History View -->
+            <div class="view" id="history-view">
+                <div class="hero">
+                    <h1 class="hero-title">Conversion History</h1>
+                    <p class="hero-subtitle">View and download your previously converted files</p>
+                </div>
+
+                <div class="history-list" id="history-list">
+                    <!-- History items will be populated dynamically -->
+                    <div class="empty-state">
+                        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                            <circle cx="40" cy="40" r="38" stroke="rgba(102, 126, 234, 0.2)" stroke-width="2" stroke-dasharray="4 4"/>
+                            <path d="M40 20V60M40 60L30 50M40 60L50 50" stroke="rgba(102, 126, 234, 0.4)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h3 class="empty-title">No conversions yet</h3>
+                        <p class="empty-subtitle">Your conversion history will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">Built with ❤️ using Firebase</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <svg class="toast-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 6V10M10 14H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="toast-message" id="toast-message">Notification message</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
