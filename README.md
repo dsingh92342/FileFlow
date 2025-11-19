@@ -2,7 +2,11 @@
 
 A beautiful, modern file converter web application with an iOS-inspired design and Firebase backend integration.
 
-![FileFlow](https://img.shields.io/badge/Status-Ready-success)
+## 🌐 Live Demo
+**[✨ View Live Demo](https://dsingh92342.github.io/FileFlow/)**
+
+![FileFlow](https://img.shields.io/badge/Status-Live-success)
+![GitHub Pages](https://img.shields.io/badge/Deployed-GitHub%20Pages-blue)
 ![Firebase](https://img.shields.io/badge/Backend-Firebase-orange)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
@@ -221,45 +225,54 @@ service firebase.storage {
 
 ## 🚀 Deployment
 
-### Deploy to Firebase Hosting
+### GitHub Pages (Recommended - Already Deployed!)
 
-1. Install Firebase CLI:
+Your site is already live at: **https://dsingh92342.github.io/FileFlow/**
+
+#### To Enable GitHub Pages (if not already enabled):
+
+1. Go to your repository: https://github.com/dsingh92342/FileFlow
+2. Click **Settings** → **Pages** (in the left sidebar)
+3. Under "Source":
+   - Branch: Select `gh-pages`
+   - Folder: `/ (root)`
+4. Click **Save**
+5. Wait 1-2 minutes for deployment
+6. Your site will be live at: `https://dsingh92342.github.io/FileFlow/`
+
+#### To Update Your Live Site:
+
+Whenever you make changes and want to update the live site:
+
 ```bash
-npm install -g firebase-tools
+# Make your changes, then:
+git add .
+git commit -m "Your update message"
+git push origin main
+
+# Update gh-pages branch
+git checkout gh-pages
+git merge main
+git push origin gh-pages
+git checkout main
 ```
 
-2. Login to Firebase:
+### Alternative: Netlify (One-Click Deploy)
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/dsingh92342/FileFlow)
+
+1. Click the button above
+2. Connect your GitHub account
+3. Deploy!
+4. Your site will be live with a custom Netlify URL
+
+### Alternative: Vercel
+
 ```bash
-firebase login
-```
-
-3. Initialize hosting:
-```bash
-firebase init hosting
-```
-
-4. Deploy:
-```bash
-firebase deploy --only hosting
-```
-
-### Deploy to Netlify
-
-1. Push your code to GitHub
-2. Go to [Netlify](https://netlify.com)
-3. Click "New site from Git"
-4. Select your repository
-5. Deploy!
-
-### Deploy to Vercel
-
-1. Install Vercel CLI:
-```bash
+# Install Vercel CLI
 npm i -g vercel
-```
 
-2. Deploy:
-```bash
+# Deploy
 vercel
 ```
 
